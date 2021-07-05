@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api'
 import PetItem from '@/components/pets/PetItem.vue'
-import { Pet } from '@/utils/pets'
+import { Pet } from '@/components/pets/types'
 
 export default defineComponent({
   components: {
