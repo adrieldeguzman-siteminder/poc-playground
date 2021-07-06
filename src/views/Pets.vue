@@ -4,12 +4,14 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import { Pet, Query } from '@/components/pets/types'
 import PetList from '@/components/pets/PetList.vue'
 import PetFilter from '@/components/pets/PetFilter.vue'
+import PetEmpty from '@/components/pets/PetEmpty.vue'
 import { allPetsQuery } from '@/components/pets/gql/queries'
 
 export default defineComponent({
   components: {
     PetList,
-    PetFilter
+    PetFilter,
+    PetEmpty
   },
   setup () {
     const { result, loading } = useQuery(allPetsQuery)
@@ -20,11 +22,13 @@ export default defineComponent({
       petFilter.value = filter
     }
     const filteredPets = computed(() => pets.value.filter(pet => pet.name.toLowerCase().includes(petFilter.value.toLowerCase())))
+    const isPetsEmpty = computed(() => filteredPets.value.length === 0)
 
     return {
       filteredPets,
       setFilter,
-      loading
+      loading,
+      isPetsEmpty
     }
   }
 })
@@ -33,6 +37,7 @@ export default defineComponent({
   <div class="pets">
     <pet-filter @filterUpdated="setFilter"/>
     <span v-if="loading">Loading...</span>
-    <pet-list :pets="filteredPets"/>
+    <pet-empty v-if="isPetsEmpty && !loading"/>
+    <pet-list v-else :pets="filteredPets"/>
   </div>
 </template>
