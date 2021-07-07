@@ -34,14 +34,10 @@ const routes: Array<RouteConfig> = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '@/views/Filters.vue'),
     props: ({ query }) => ({
-      filter1: queryParamToArray(query.filter1),
-      filter2: queryParamToArray(query.filter2),
-      filter3: queryParamToArray(query.filter3)
+      data: query.data
     })
   }
 ]
-
-const queryParamToArray = (queryParam: string | (string | null)[]) => typeof queryParam === 'string' ? [queryParam] : queryParam
 
 const router = new VueRouter({
   mode: 'history',

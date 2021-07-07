@@ -1,27 +1,32 @@
 <script lang="ts">
-import { defineComponent, PropType, getCurrentInstance, reactive, watch } from '@vue/composition-api'
+import { defineComponent, getCurrentInstance, reactive, watch } from '@vue/composition-api'
 import VueRouter from 'vue-router'
+
+interface FilterData {
+  filter1?: string | string[]
+  filter2?: string | string[]
+  filter3?: string | string[]
+}
 
 export default defineComponent({
   props: {
-    filter1: {
-      type: Array as PropType<string[]>
-    },
-    filter2: {
-      type: Array as PropType<string[]>
-    },
-    filter3: {
-      type: Array as PropType<string[]>
+    data: {
+      type: String
     }
   },
   setup (props) {
     const router = getCurrentInstance()?.proxy.$router as VueRouter
-    const { filter1, filter2, filter3 } = props
+    const { data } = props
+    let decodedAndParsedData: FilterData = {}
+
+    if (data) {
+      decodedAndParsedData = JSON.parse(atob(data))
+    }
 
     const myFilters = reactive({
-      filterA: filter1 ?? [],
-      filterB: filter2 ?? [],
-      filterC: filter3 ?? []
+      filterA: decodedAndParsedData?.filter1 ?? [],
+      filterB: decodedAndParsedData?.filter2 ?? [],
+      filterC: decodedAndParsedData?.filter3 ?? []
     })
 
     const filterAValues = [1, 2, 3, 4, 5]
@@ -29,12 +34,12 @@ export default defineComponent({
     const filterCValues = ['!', '@', '#', '$', '%']
 
     watch(myFilters, (value) => {
-      const query = {
+      const data = btoa(JSON.stringify({
         filter1: value.filterA,
         filter2: value.filterB,
         filter3: value.filterC
-      }
-      router.push({ query })
+      }))
+      router.push({ query: { data } })
     })
 
     return { myFilters, filterAValues, filterBValues, filterCValues }
