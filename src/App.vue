@@ -6,7 +6,8 @@
       <router-link to="/pets">Pets</router-link> |
       <router-link to="/checkout">Checkout</router-link> |
       <router-link to="/filters">Filters</router-link> |
-      <router-link to="/state">State</router-link>
+      <router-link to="/state">State</router-link> |
+      <router-link to="/local-storage">Local Storage</router-link>
     </div>
     <router-view/>
   </div>
